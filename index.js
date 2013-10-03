@@ -36,7 +36,7 @@ var Database = module.exports = function (settings, objective, framework) {
     if (framework.log.level === 'debug') this.log.debug('Opening Connections To:', uri);
     else this.log.info('Opening Connections...');
   } else {
-    uri = 'mongodb://' +  (settings.user ? settings.username + ':' + settings.password + '@' : '') + settings.host + (settings.port ? ':' + settings.port : '') + '/' + (settings.database || '_test');
+    uri = 'mongodb://' +  (settings.username ? settings.username + ':' + settings.password + '@' : '') + settings.host + (settings.port ? ':' + settings.port : '') + '/' + (settings.database || '_test');
     if (framework.log.level === 'debug') this.log.debug('Opening Connection To:', uri);
     else this.log.info('Opening Connection...');
   }
