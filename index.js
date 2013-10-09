@@ -106,13 +106,16 @@ Database.prototype.exists = function (collection, query, callback) {
   });
 };
 
-Database.prototype.find = function (collection, query, callback) {
+Database.prototype.find = function (collection, query, projection, callback) {
   if (query.id) {
     query._id = (typeof query.id === 'string') ? new this.ObjectID(query.id) : query.id;
     delete query.id;
   } else query = this.parse(query);
 
-  this.collections[collection].findOne(query, function (err, data) {
+  if (typeof projection === 'function')
+    callback = projection, projection = null;
+
+  this.collections[collection].findOne(query, projection, function (err, data) {
     callback(err, data);
   });
 };
@@ -155,7 +158,8 @@ Database.prototype.remove = function (collection, data, callback) {
 Database.prototype.all = function (collection, filter, callback) {
   (!filter) && (filter = {});
   var query = filter.where ? this.parse(filter.where) : {};
-  var cursor = this.collections[collection].find(query);
+  var projection = filter.projection;
+  var cursor = this.collections[collection].find(query, projection);
 
   if (filter.order) {
     if (typeof filter.order === 'string') {
