@@ -113,7 +113,9 @@ Database.prototype.find = function (collection, query, projection, callback) {
   } else query = this.parse(query);
 
   if (typeof projection === 'function')
-    callback = projection, projection = null;
+    callback = projection, projection = {};
+  else if (!projection)
+    projection = {};
 
   this.collections[collection].findOne(query, projection, function (err, data) {
     callback(err, data);
